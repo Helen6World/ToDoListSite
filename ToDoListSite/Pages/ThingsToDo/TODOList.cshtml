@@ -1,0 +1,171 @@
+﻿@page
+@model ToDoListSite.TODOListModel
+
+
+@{
+    ViewData["Title"] = "TODOList";
+}
+
+<h1>TODOList for @Convert.ToString(DateTime.Now.ToString("dd/MM/yyyy"), new System.Globalization.CultureInfo("en-US"))</h1>
+<link href="~/css/styles.css" rel="stylesheet" />
+
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ThingToDo.Content" class="control-label"></label>
+                <input asp-for="ThingToDo.Content" class="form-control" />
+                <span asp-validation-for="ThingToDo.Content" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" name="Create" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Unfinished things:
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model.ThingsToDo)
+        {
+            @if (item.IsDone != "Yes")
+            {
+
+                <tr>
+                    <td width="60%">
+
+                        <div>
+                            @{
+                                string classNameTemp = "";
+                                if (item.IsDone == "Yes")
+                                {
+                                    classNameTemp = "lineThroughClass";
+                                }
+
+                            }
+
+                            <form method="post" onChange="this.form.submit()">
+                                <input type="hidden" asp-for="ThingToDo.ID" />
+                                <input type="submit" class="checkBoxBtn" name="name" value="       " asp-route-id="@item.ID" />
+                                <label class="@classNameTemp"><span class="innerText">@Html.DisplayFor(modelItem => item.Content)</span></label>
+
+                            </form>
+
+                        </div>
+                    </td>
+                    <td>
+                        <form method="post">
+                            <input type="button" name="Edit" value="Edit" class="btn btn-primary btnEditContent" /> |
+                            <input type="hidden" asp-for="ThingToDo.ID" />
+                            <input type="submit" name="Delete" value="Delete" class="btn btn-danger" asp-route-id="@item.ID" />
+
+                        </form>
+
+                        <form method="post" class="editPanel hiddenEditPanel">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <input type="hidden" asp-for="ThingToDo.ID" />
+                            <div class="form-group">
+                                <label class="control-label">Edit context:</label>
+                                <input asp-for="ThingToDo.Content" class="form-control" name="Content" />
+
+                            </div>
+
+                            <div class="form-group">
+                                <input type="hidden" asp-for="ThingToDo.ID" />
+                                <input type="submit" name="Save" value="Save" class="btn btn-success" asp-route-id="@item.ID" />
+                            </div>
+                        </form>
+
+                    </td>
+
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Finished things:
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model.ThingsToDo)
+        {
+            @if (item.IsDone == "Yes")
+            {
+
+                <tr>
+                    <td width="60%">
+
+                        <div>
+                            @{
+                                string classNameTemp = "";
+                                if (item.IsDone == "Yes")
+                                {
+                                    classNameTemp = "lineThroughClass";
+                                }
+
+                            }
+
+                            <form method="post" onChange="this.form.submit()">
+                                <input type="hidden" asp-for="ThingToDo.ID" />
+                                <input type="submit" class="checkBoxBtn" name="name" value="&#10004;" asp-route-id="@item.ID" />
+                                <label class="@classNameTemp"><span class="innerText">@Html.DisplayFor(modelItem => item.Content)</span></label>
+
+                            </form>
+
+                        </div>
+                    </td>
+
+                    <td>
+                        <form method="post">
+                            <input type="button" name="Edit" value="Edit" class="btn btn-primary btnEditContent" /> |
+                            <input type="hidden" asp-for="ThingToDo.ID" />
+                            <input type="submit" name="Delete" value="Delete" class="btn btn-danger" asp-route-id="@item.ID" />
+                        </form>
+
+                        <form method="post" class="editPanel hiddenEditPanel">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <input type="hidden" asp-for="ThingToDo.ID" />
+                            <div class="form-group">
+                                <label class="control-label">Edit context:</label>
+                                <input asp-for="ThingToDo.Content" class="form-control" name="Content" />
+                            </div>
+
+                            <div class="form-group">
+                                <input type="hidden" asp-for="ThingToDo.ID" />
+                                <input type="submit" name="Save" value="Save" class="btn btn-success" asp-route-id="@item.ID" />
+                            </div>
+                        </form>
+
+                    </td>
+
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<script src="~/js/jquery-3.5.1.js"></script>
+<script src="~/js/functionalScripts.js"></script>
+
